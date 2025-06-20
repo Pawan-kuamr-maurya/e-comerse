@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= item.name %> - Item Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+ <a href="/"><img src="https://img.icons8.com/?size=50&id=80689&format=png&color=000000" alt="" srcset=""></a>
+  <!-- Container -->
+  <div class="max-w-5xl mx-auto p-4">
+
+    <!-- Item Card -->
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden md:flex">
+
+      <!-- Image Carousel -->
+      <div class="md:w-1/2">
+        <div class="relative">
+          <!-- Main Image -->
+          <img id="mainImage" src="<%= item.images && item.images.length > 0 ? item.images[0].url : 'https://via.placeholder.com/600x400' %>" alt="Item Image" class="w-full h-96 object-cover transition-transform duration-300" />
+
+          <!-- Thumbnails -->
+          <div class="flex justify-center p-2 space-x-2 bg-gray-50">
+            <% if (item.images && item.images.length > 0) { %>
+              <% item.images.forEach(function(image){ %>
+                <img src="<%= image.url %>" alt="Thumbnail" class="w-16 h-16 object-cover cursor-pointer border-2 border-gray-300 hover:border-blue-500 rounded" onclick="changeImage('<%= image.url %>')" />
+              <% }); %>
+            <% } else { %>
+              <p>No images available</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item Details -->
+      <div class="md:w-1/2 p-6 flex flex-col justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800 mb-4"><%= item.name %></h1>
+          
+          <!-- Ratings -->
+          <div class="flex items-center mb-4">
+            <div class="flex items-center space-x-1 text-yellow-400">
+              <% 
+                const fullStars = Math.floor(item.averageRating);
+                const halfStar = item.averageRating - fullStars >= 0.5;
+                const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+              %>
+              <% for(let i=0; i<fullStars; i++) { %>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.572-.955L10 0l2.94 5.955 6.572.955-4.756 4.635 1.122 6.545z"/></svg>
+              <% } %>
+              <% if (halfStar) { %>
+                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.572-.955L10 0v15z"/></svg>
+              <% } %>
+              <% for(let i=0; i<emptyStars; i++) { %>
+                <svg class="w-5 h-5 fill-current text-gray-300" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.572-.955L10 0l2.94 5.955 6.572.955-4.756 4.635 1.122 6.545z"/></svg>
+              <% } %>
+              <span class="ml-2 text-gray-600 text-sm"><%= item.ratings.length %> reviews</span>
+            </div>
+          </div>
+          
+          <!-- Price -->
+          <div class="mb-4">
+            <span class="text-3xl font-bold text-blue-600">$<%= item.price.toFixed(2) %></span>
+          </div>
+
+          <!-- Description -->
+          <p class="text-gray-700 mb-4"><%= item.description %></p>
+
+          <!-- Quantity & Buttons -->
+          <div class="flex items-center space-x-4 mb-6">
+            <!-- <div>
+              <label for="quantity" class="block text-gray-600 mb-1 text-sm">Quantity</label>
+              <input type="number" id="quantity" min="1" value="1" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+            </div> -->
+            <div>
+                <label for="cart" class="block text-gray-600 mb-1 text-sm">ADD NOW</label>
+                <button onclick="addtocart('<%= item._id %>')" id="cart" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">Add to Cart</button>
+              </div>
+            <div>
+
+               <form action="/item/placeorder" method="post"> <input type="text" name="itemids" id="" value="<%= item.id %>" style="display:none;"> 
+                <label for="buy" class="block text-gray-600 mb-1 text-sm">BUY NOW</label>
+                <button  id="buy" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">Buy</button>
+                </form>
+
+
+              
+              <!-- <a id="buy"  herf="" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">Place Order</a> -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Info -->
+        <div class="border-t pt-4 flex items-center justify-between">
+          <div>
+            <p class="text-gray-600 text-sm">Category: <%= item.category %></p>
+            <p class="text-gray-600 text-sm">Stock: <%= item.stockQuantity %> items available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="mt-8 bg-white p-4 rounded-lg shadow">
+      <h2 class="text-xl font-semibold mb-4">Customer Reviews</h2>
+      
+      <% if (item.ratings && item.ratings.length > 0) { %>
+        <% item.ratings.forEach(function(rating) { %>
+          <div class="border-b py-2">
+            <p class="text-gray-700 mb-1"><%= rating.comment || 'No comment provided.' %></p>
+            <div class="flex items-center space-x-2 text-yellow-400 text-sm">
+              <% 
+                const fullStarsRev = Math.floor(rating.rating);
+                const halfStarRev = rating.rating - fullStarsRev >= 0.5;
+                const emptyStarsRev = 5 - fullStarsRev - (halfStarRev ? 1 : 0);
+              %>
+              <% for(let i=0; i<fullStarsRev; i++) { %>
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.572-.955L10 0l2.94 5.955 6.572.955-4.756 4.635 1.122 6.545z"/></svg>
+              <% } %>
+              <% if (halfStarRev) { %>
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.572-.955L10 0v15z"/></svg>
+              <% } %>
+              <% for(let i=0; i<emptyStarsRev; i++) { %>
+                <svg class="w-4 h-4 fill-current text-gray-300" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.122-6.545L.488 6.91l6.572-.955L10 0l2.94 5.955 6.572.955-4.756 4.635 1.122 6.545z"/></svg>
+              <% } %>
+              <span><%= rating.rating %> stars</span>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p>No reviews yet.</p>
+      <% } %>
+    </div>
+
+  </div>
+
+  <script>
+    // Change main image when a thumbnail is clicked
+    function changeImage(src) {
+      document.getElementById('mainImage').src = src;
+    }
+  </script>
+<script>
+
+function addtocart(itemId) {
+  console.log("we get");
+  
+  fetch(`/item/addtocart/${itemId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      alert('Item added to cart successfully!');
+      console.log(data); // Optional: log response data
+    })
+    .catch(error => {
+      alert('Failed to add item to cart.');
+      console.error('Error:', error);
+    });
+}
+</script>
+</body>
+</html>

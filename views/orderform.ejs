@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Place Order</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+total money in wallet <%=user.wallet %>
+  <div class="max-w-5xl mx-auto p-8">
+    <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Place Your Order</h1>
+
+    <!-- Order Items Summary -->
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+      <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">Order Summary</h2>
+      <% var total=0 %>
+      <% if (orderItems && orderItems.length > 0) { %>
+        <div class="space-y-4">
+          <% orderItems.forEach(function(item) { %>
+            <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200">
+              <div class="flex items-center space-x-4 w-2/3">
+                <img src="<%= item.images[0].url || 'https://images.squarespace-cdn.com/content/v1/530cd931e4b0e49b19b254ec/ef572341-cfa5-48b4-823e-195af17cbcf3/final+logo++copy-1+%281%29.png' %>" alt="Item Image" class="w-16 h-16 object-cover rounded-lg" />
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-700"><%= item.name %></h3>
+                  
+                  <p class="text-gray-600 text-sm"><%= (item.priceAtPurchase ) %></p>
+                    
+                </div>
+                <div>
+              <label for="quantity" class="block text-gray-600 mb-1 text-sm">Quantity</label>
+              <input type="number" onchange="changeupdate()" id="quantity" min="1" value="1" class="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"/>
+            </div>
+              </div>
+              <% total=total+item.price %>
+              <div class="text-xl font-bold text-gray-800" id="prise"><%= (item.price ) %></div>$
+            </div>
+          <% }) %>
+        </div>
+        <!-- Total -->
+        <div class="mt-4 text-right font-semibold text-gray-700 text-lg">
+          Total: $<div id="finalprise"><%= (total ) %></div>
+        </div>
+      <% } else { %>
+        <p class="text-gray-500 text-center">No items in your order.</p>
+      <% } %>
+    </div>
+
+    <!-- Order Form -->
+    <form class="bg-white rounded-lg shadow-lg p-8 space-y-6" action="/item/placeorderfinal" method="POST" onsubmit="return validateForm()">
+      <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">Shipping Address</h2>
+      <input type="text" name="productid" value="<%= orderItems[0]._id %>" id="" hidden>
+      <input type="text" name="quantity" value="1" id="sendquantity" hidden>
+     
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-gray-700 mb-2" for="name">name</label>
+          <input type="text" id="name" name="name"  value='<%=user.name  %>'  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        </div>
+         <div>
+          <label class="block text-gray-700 mb-2" for="name">mobilno</label>
+          <input type="text" id="phone" name="phone"  value='<%=user.phone  %>'  class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        </div>
+
+        <div>
+          <label class="block text-gray-700 mb-2" for="phone">address</label>
+          <textarea class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" name="address" id="address" required>
+<%= user.address.street + " " + user.address.city + " " + user.address.state + " " + user.address.country + " " + user.address.zipCode + " " + user.phone %>
+</textarea>
+       
+
+
+<div>
+          <label class="block text-gray-700 mb-2" for="city">City</label>
+          <input type="text" id="city" name="city"value='<%=user.address.city  %>' class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 mb-2" for="state">State</label>
+          <input type="text" id="state" name="state"value='<%=user.address.state  %>' class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 mb-2" for="postalCode">Postal Code</label>
+          <input type="text" id="postalCode" name="postalCode"value='<%=user.address.zipCode  %>' class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        </div>
+        <div>
+          <label class="block text-gray-700 mb-2" for="country">Country</label>
+          <input type="text" id="country" name="country"value='<%=user.address.country  %>' class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required />
+        </div>
+        
+
+      <!-- Payment Method -->
+      <h2 class="text-2xl font-semibold mb-4 border-b pb-2 border-gray-200">Payment Method</h2>
+      <div class="flex flex-col md:flex-row gap-4">
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio text-blue-600" name="paymentMethod" value="Credit Card"  required />
+          <span class="ml-2 text-gray-700">Credit Card</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio text-blue-600" name="paymentMethod" value="Wallet" required checked />
+          <span class="ml-2 text-gray-700">Wallet</span>
+        </label>
+        <label class="inline-flex items-center">
+          <input type="radio" class="form-radio text-blue-600" name="paymentMethod" value="Cash on Delivery" required />
+          <span class="ml-2 text-gray-700">Cash on Delivery</span>
+        </label>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-6 text-center">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg shadow-lg font-semibold transition">
+          Place Order
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function validateForm() {
+      // Basic validation if needed
+      return true;
+    }
+
+    function changeupdate(params) {
+     
+        let prise=document.getElementById("prise").innerText;
+     const quantityInput = document.getElementById('quantity');
+     document.getElementById('sendquantity').value=quantityInput.value;
+     
+  const quantityValue = quantityInput.value; 
+       console.log(prise+"  "+quantityValue);
+       document.getElementById("finalprise").innerText=prise*quantityValue;
+    }
+  </script>
+</body>
+</html>

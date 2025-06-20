@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen font-sans">
+  <div class="max-w-4xl w-full bg-white p-8 rounded-lg shadow-lg md:flex md:space-x-8">
+    <!-- Left Side: Illustration or Image -->
+    <div class="hidden md:flex md:flex-col md:justify-center md:items-center md:w-1/2 bg-gradient-to-tr from-blue-400 to-purple-600 rounded-lg p-6">
+      <img src="/image/back.jpg" style=" object-fit:fill;  height: 100%; " alt="" srcset="">
+      <!-- <h2 class="text-3xl font-bold text-white mb-4">Create Your Account</h2>
+      <p class="text-white mb-6 text-center">Join us today and enjoy exclusive benefits!</p>
+       -->
+      <!-- Optional: Add an illustration or image here -->
+    </div>
+
+    <!-- Right Side: Signup Form -->
+    <div class="w-full md:w-1/2">
+      <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Sign Up</h2>
+      <form class="space-y-4" action="#" method="POST">
+        <!-- Name -->
+        <div>
+          <label for="name" class="block text-gray-600 mb-1">Name</label>
+          <input type="text" id="name" name="name" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Your full name" />
+        </div>
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-gray-600 mb-1">Email</label>
+          <input type="email" id="email" name="email" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="you@example.com" />
+        </div>
+        <!-- Age Input -->
+<div class="mb-4">
+  <label for="age" class="block text-gray-600 mb-1">Age</label>
+  <input type="number" id="age" name="age" required
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Enter your age" />
+</div>
+
+<!-- Gender Dropdown -->
+<div class="mb-4">
+  <label for="gender" class="block text-gray-600 mb-1">Gender</label>
+  <select id="gender" name="gender" required
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+    <option value="" disabled selected>Select your gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+</div>
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-gray-600 mb-1">Password</label>
+          <input type="password" id="password" name="password" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Enter your password" />
+        </div>
+        <!-- Phone Number -->
+        <div>
+          <label for="phone" class="block text-gray-600 mb-1">Phone Number</label>
+          <input type="tel" id="phone" name="phone" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="+1234567890" />
+        </div>
+        <!-- Address: Street -->
+        <div>
+          <label for="street" class="block text-gray-600 mb-1">Street</label>
+          <input type="text" id="street" name="street" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Street address" />
+        </div>
+        <!-- City -->
+        <div>
+          <label for="city" class="block text-gray-600 mb-1">City</label>
+          <input type="text" id="city" name="city" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="City" />
+        </div>
+        <!-- State -->
+        <div>
+          <label for="state" class="block text-gray-600 mb-1">State</label>
+          <input type="text" id="state" name="state" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="State" />
+        </div>
+        <!-- Zip Code -->
+        <div>
+          <label for="zip" class="block text-gray-600 mb-1">Zip Code</label>
+          <input type="text" id="zip" name="zip" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Zip Code" />
+        </div>
+        <!-- Country -->
+        <div>
+          <label for="country" class="block text-gray-600 mb-1">Country</label>
+          <input type="text" id="country" name="country" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Country" />
+        </div>
+        <!-- Image URL -->
+        <div>
+          <label for="image" class="block text-gray-600 mb-1">Profile Image URL</label>
+          <input type="url" id="image" name="image" required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="https://example.com/image.jpg" />
+        </div>
+        <!-- Submit Button -->
+        <button type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition duration-300">
+          Sign Up
+        </button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

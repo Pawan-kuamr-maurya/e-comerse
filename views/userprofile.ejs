@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
+
+  <div class="max-w-6xl w-full bg-white rounded-lg shadow-lg p-8 m-4 space-y-8">
+   <a href="/"><img src="https://img.icons8.com/?size=50&id=80689&format=png&color=000000" alt="" srcset=""></a>
+    <!-- Profile Header -->
+    <div class="flex items-center space-x-6 mb-8">
+
+     
+      <div class="w-24 h-24 flex-shrink-0 relative">
+        <img src="<%= user.profileImage || 'https://via.placeholder.com/150' %>" alt="Profile Image" class="w-full h-full object-cover rounded-full border-4 border-blue-400" />
+      </div>
+      <div>
+        <h2 class="text-3xl font-bold text-gray-800 mb-2"><%= user.name %></h2>
+        <p class="text-gray-600 mb-1"><strong>Email:</strong> <%= user.email %></p>
+        <p class="text-gray-600 mb-1"><strong>Role:</strong> <%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></p>
+        <p class="text-gray-600 mb-1"><strong>Age:</strong> <%= user.age %></p>
+        <% if(user.gender) { %>
+          <p class="text-gray-600 mb-1"><strong>Gender:</strong> <%= user.gender.charAt(0).toUpperCase() + user.gender.slice(1) %></p>
+        <% } %>
+        <% if(user.phone) { %>
+          <p class="text-gray-600 mb-1"><strong>Phone:</strong> <%= user.phone %></p>
+        <% } %>
+        <% if(user.address) { %>
+          <p class="text-gray-600 mb-1">
+            <strong>Address:</strong> 
+            <%= user.address.street %>, <%= user.address.city %>, <%= user.address.state %>, <%= user.address.zipCode %>, <%= user.address.country %>
+          </p>
+        <% } %>
+        <p class="text-gray-600 mb-1"><strong>Wallet:</strong> $<%= user.wallet.toFixed(2) %></p>
+        <p class="text-gray-600 mb-1"><strong>Member Since:</strong> <%= new Date(user.createdAt).toLocaleDateString() %></p>
+      </div>
+    </div>
+
+    <!-- Edit Button -->
+    <div class="flex justify-end mb-4">
+      <a href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC0mIb5VuvexilmcwQg-npsorKfn-UKPJ6qg&s" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold mx-4 px-4 py-2 rounded-lg transition duration-200">
+        Edit Profile
+      </a>
+       <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white font-semibold mx-4 px-4 py-2 rounded-lg transition duration-200">
+        LOG OUT
+      </a>
+    </div>
+   
+
+    <!-- Placed Orders Section -->
+    <div>
+      <h3 class="text-2xl font-semibold text-gray-800 mb-4 border-b-2 border-gray-200 pb-2">Placed Orders</h3>
+      <% if (orders && orders.length > 0) { %>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white rounded-lg shadow-md divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Order Date</th>
+                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Total</th>
+                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Shipping Address</th>
+                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Payment Method</th>
+                <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">view product</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <% orders.forEach(order => { %>
+                <tr>
+                  <td class="px-4 py-3 text-sm text-gray-600"><%= new Date(order.orderDate).toLocaleDateString() %></td>
+                  <td class="px-4 py-3 text-sm capitalize">
+                    <span class="px-2 py-1 rounded-full <%= {
+                      'Pending': 'bg-yellow-200 text-yellow-800',
+                      'Processing': 'bg-blue-200 text-blue-800',
+                      'Shipped': 'bg-purple-200 text-purple-800',
+                      'Delivered': 'bg-green-200 text-green-800',
+                      'Cancelled': 'bg-red-200 text-red-800'
+                    }[order.status] %>">
+                      <%= order.status %>
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-sm text-gray-700">$<%= order.totalAmount.toFixed(2) %></td>
+                  <td class="px-4 py-3 text-sm text-gray-600">
+                    <div class="max-w-xs">
+                       <p><strong>Order id</strong> <%= order._id %></p>
+                      <p><strong>Name:</strong> <%= order.shippingAddress.name %></p>
+                      <p><strong>Address:</strong> <%= order.shippingAddress.addressLine1 %></p>
+                      <% if (order.shippingAddress.addressLine2) { %>
+                        <p><%= order.shippingAddress.addressLine2 %></p>
+                      <% } %>
+
+                      <p><strong>City:</strong> <%= order.shippingAddress.city %></p>
+                      <p><strong>State:</strong> <%= order.shippingAddress.state %></p>
+                      <p><strong>Postal Code:</strong> <%= order.shippingAddress.postalCode %></p>
+                      <p><strong>Country:</strong> <%= order.shippingAddress.country %></p>
+                      <p><strong>Phone:</strong> <%= order.shippingAddress.phone %></p>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-sm text-gray-600"><%= order.paymentMethod %></td>
+                  <td class="px-4 py-3 text-sm space-x-2">
+                    <a href="/item/view/<%= orders[0].items[0].item %>" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition duration-200 text-sm">View</a>
+                     <a href="/item/cancel/<%= orders[0]._id %>" class="bg-red-500 hover:bg-green-600 text-white px-3 py-1 rounded transition duration-200 text-sm">delete order</a>
+                    <!-- Additional actions like Reorder, Cancel, etc., can be added here -->
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="text-gray-500">No orders placed yet.</p>
+      <% } %>
+    </div>
+
+  </div>
+
+</body>
+</html>

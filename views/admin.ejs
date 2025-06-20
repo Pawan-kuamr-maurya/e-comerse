@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Orders</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6 font-sans">
+  <a href="/admin/additem">add new item</a>
+  <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">All Orders</h1>
+
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+      <thead class="bg-gray-200 text-gray-600 uppercase text-sm">
+        <tr>
+          <th class="px-4 py-3 border-b border-gray-300">Order ID</th>
+          <th class="px-4 py-3 border-b border-gray-300">User</th>
+          <th class="px-4 py-3 border-b border-gray-300">Items</th>
+          <th class="px-4 py-3 border-b border-gray-300">Total</th>
+          <th class="px-4 py-3 border-b border-gray-300">Status</th>
+          <th class="px-4 py-3 border-b border-gray-300">Order Date</th>
+          <th class="px-4 py-3 border-b border-gray-300">Shipping Address</th>
+          <th class="px-4 py-3 border-b border-gray-300">Payment Method</th>
+          <th class="px-4 py-3 border-b border-gray-300">Payment Status</th>
+          <th class="px-4 py-3 border-b border-gray-300">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <% orders.forEach(order => { %>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 border-b border-gray-300 text-sm"><%= order._id %></td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm">
+              <div><strong>Name:</strong> <%= order.shippingAddress.name || 'N/A' %></div>
+              <div><strong>Phone:</strong> <%= order.shippingAddress.phone || 'N/A' %></div>
+            </td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm max-w-xl">
+              <% order.items.forEach(item => { %>
+                <div class="mb-2 p-2 bg-gray-50 rounded shadow-sm">
+                  <div><strong>Item ID:</strong> <%= item.item.name %></div>
+                  <div><strong>Item price:</strong> <%= item.item.price %></div>
+                  <div><strong>Quantity:</strong> <%= item.quantity %></div>
+                  <div><strong>Price :</strong> $<%= item.priceAtPurchase.toFixed(2) %></div>
+                </div>
+              <% }) %>
+            </td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm">$<%= order.totalAmount.toFixed(2) %></td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm">
+              <span class="capitalize px-2 py-1 rounded <%=
+                {
+                  'Pending': 'bg-yellow-200 text-yellow-800',
+                  'Processing': 'bg-blue-200 text-blue-800',
+                  'Shipped': 'bg-purple-200 text-purple-800',
+                  'Delivered': 'bg-green-200 text-green-800',
+                  'Cancelled': 'bg-red-200 text-red-800'
+                }[order.status] %>">
+                <%= order.status %>
+              </span>
+            </td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm"><%= new Date(order.orderDate).toLocaleString() %></td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm">
+              <div><strong>Name:</strong> <%= order.shippingAddress.name %></div>
+              <div><strong>Address:</strong> <%= order.shippingAddress.addressLine1 %></div>
+              <div><strong>City:</strong> <%= order.shippingAddress.city %></div>
+              <div><strong>State:</strong> <%= order.shippingAddress.state %></div>
+              <div><strong>Postal Code:</strong> <%= order.shippingAddress.postalCode %></div>
+              <div><strong>Country:</strong> <%= order.shippingAddress.country %></div>
+            </td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm"><%= order.paymentMethod %></td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm"><%= order.paymentStatus %></td>
+            <td class="px-4 py-3 border-b border-gray-300 text-sm">
+              <form method="POST" action="/admin/orders/<%= order._id %>/status" class="flex space-x-2 items-center">
+                <select name="status" class="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                  <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                  <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                  <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                  <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                  <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                </select>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">Update</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

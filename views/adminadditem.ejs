@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Add New Item</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-center">Create New Item</h2>
+    <form id="itemForm" action="/admin/add-item" method="POST" enctype="application/x-www-form-urlencoded" class="space-y-4">
+      <div>
+        <label class="block mb-1 font-medium" for="name">Name</label>
+        <input class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" id="name" name="name" required />
+      </div>
+      
+      <div>
+        <label class="block mb-1 font-medium" for="description">Description</label>
+        <textarea class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" id="description" name="description" rows="4" required></textarea>
+      </div>
+      
+      <div>
+        <label class="block mb-1 font-medium" for="price">Price</label>
+        <input class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="number" id="price" name="price" min="0" step="0.01" required />
+      </div>
+      
+      <div>
+        <label class="block mb-1 font-medium" for="category">Category</label>
+        <input class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" id="category" name="category" required />
+      </div>
+      
+      <div>
+        <label class="block mb-1 font-medium" for="images">Images link</label>
+        <input class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" id="images" name="images" placeholder='image link deperate with coma' />
+      </div>
+      
+      <div>
+        <label class="block mb-1 font-medium" for="stockQuantity">Stock Quantity</label>
+        <input class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="number" id="stockQuantity" name="stockQuantity" min="0" required />
+      </div>
+      
+      <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">Add Item</button>
+    </form>
+  </div>
+
+  <script>
+    // Optional: handle form submission with fetch API (if you prefer AJAX)
+    // document.getElementById('itemForm').addEventListener('submit', async function(e) {
+    //   e.preventDefault();
+    //   const formData = new FormData(this);
+    //   const data = Object.fromEntries(formData.entries());
+    //   await fetch('/add-item', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(data),
+    //   });
+    // });
+  </script>
+</body>
+</html>
