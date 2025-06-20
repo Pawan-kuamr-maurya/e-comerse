@@ -1,3 +1,5 @@
+
+require("dotenv").config();
 const mongoose = require('mongoose');
 const Item = require('./models/item') // assuming you've defined itemSchema as above
 const User = require('./models/User');
