@@ -35,7 +35,6 @@ app.post("/register", async (req, res) => {
       name,
       email,
       password,
-      role,
       age,
       gender,
       phone,
@@ -47,10 +46,15 @@ app.post("/register", async (req, res) => {
       image,
     } = req.body;
 
+    if (![name, email, password, age, gender, phone, street, city, state, zip, country, image].every(Boolean)) {
+      console.log("something is missing");
+      return res.render("signup.ejs", { error: "Fill full information." });
+    }
+
     // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.render("register", { error: "Email already registered." });
+      return res.render("signup.ejs", { error: "Email already registered." });
     }
 
     // Hash password
@@ -58,45 +62,43 @@ app.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const address = {
-      street: street,
-      city: city,
-      state: state,
-      zip: zip,
-      country: country,
+      street,
+      city,
+      state,
+      zipCode: zip,
+      country,
     };
 
-    // Create new user
     const newUser = new User({
       address,
       name,
       email,
       password: hashedPassword,
-      role,
       age,
       gender,
       phone,
       profileImage: image,
     });
-    await newUser.save();
 
-    // Generate JWT token
+    try {
+      await newUser.save();
+    } catch (saveErr) {
+      console.error('Error saving user:', saveErr);
+      return res.render("signup.ejs", { error: "Error saving user: " + saveErr.message });
+    }
+
     const token = jwt.sign(
       { userId: newUser._id, email: newUser.email, role: newUser.role },
-      process.env.JWT_SECRET, // replace with your secure secret
+      process.env.JWT_SECRET,
       { expiresIn: process.env.EXPIREIN }
     );
 
-    // Optionally, set token in cookie/session
     res.cookie("token", token, { httpOnly: true });
-
     req.user = newUser;
-
-    console.log(req.user);
-    //res.send("ok");
     res.redirect("/");
   } catch (err) {
-    console.error(err);
-    res.status(500).send("retry");
+    console.error('Registration error:', err);
+    res.status(500).send("An error occurred. Please try again.");
   }
 });
 app.get("/login", (req, res) => {
