@@ -15,7 +15,7 @@ const isadmin = require("./isvaliduser/isadmin.js");
 const app = express();
 const cookieParser = require("cookie-parser");
 const { log } = require("console");
-const item = require("./models/item");
+
 app.use(cookieParser());
 
 // Middleware
